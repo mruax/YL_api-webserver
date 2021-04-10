@@ -1,3 +1,12 @@
+html {
+    position: relative;
+    min-height: 100%;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+
 form.login_form {
     margin-left: auto;
     margin-right: auto;
@@ -8,12 +17,64 @@ form.login_form {
     padding: 10px;
 }
 
+body {
+    background: darkgray;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+
+footer {
+    /*position: absolute;*/
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #666;
+}
+
+.wrapper {
+    margin-bottom: 100px;
+}
+
+.div-center {
+    background-color: #FFFFFF;
+    width: 100%;
+    height: 100vh;
+    /*height: 100%;*/
+    /*margin: auto;*/
+    /*min-height: 100%;*/
+    /*margin-bottom: -100px;*/
+}
+
+.div-center2 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 58em;
+}
+
+img.resize {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    overflow: auto;
+}
+
 h1, h2 {
     margin-left: auto;
     margin-right: auto;
     max-width: 450px;
 }
 
-body {
-    background: darkgray;
+.h1-title {
+    margin-bottom: 20px;
+    align: "center";
+}
+
+.p-main-text {
+    font-size: 20px;
+    padding-left: 10%;
+    margin-bottom: 20px;
 }
