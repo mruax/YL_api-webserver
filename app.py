@@ -6,9 +6,10 @@ from flask_ngrok import run_with_ngrok
 # Blueprints import:
 from blueprints.auth import auth_blueprint
 from blueprints.general import general_blueprint
-# Database session import:
+# Database functions import:
 from data import db_session
 from data.db_session import create_session
+from data.users import User
 
 # App initialization:
 app = Flask(__name__)
@@ -26,6 +27,13 @@ app.register_blueprint(auth_blueprint)
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+# Log in user from database:
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 def main():

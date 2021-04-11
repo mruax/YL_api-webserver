@@ -10,6 +10,7 @@ products_blueprint = Blueprint(
     template_folder='templates')
 
 
+# Storage items page:
 @products_blueprint.route('/storage')
 @login_required
 def storage_page():

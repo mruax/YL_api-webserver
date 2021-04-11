@@ -7,6 +7,8 @@ general_blueprint = Blueprint(
     static_folder='static',
     template_folder='templates')
 
+
+# Main page:
 @general_blueprint.route('/')
 def main_page():
     return render_template('main_page.html')
