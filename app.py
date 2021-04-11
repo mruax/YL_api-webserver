@@ -12,9 +12,10 @@ from data.db_session import create_session
 from data.users import User
 
 # App initialization:
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 run_with_ngrok(app)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config.from_object('config')
+app.config.from_pyfile('config.py')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
