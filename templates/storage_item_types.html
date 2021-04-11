@@ -2,9 +2,30 @@
 
 {% block content %}
 <h1 class="h1-title">Категории товаров</h1>
+<!--<script>-->
+<!--    var display_type = "cards";-->
+<!--    function change_display_type() {-->
+<!--        if (display_type === "cards") display_type = "list";-->
+<!--        else display_type = "cards";-->
+<!--    }-->
+<!--</script>-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('a#test').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/storage',
+                function(data) {
+                if (display_type === "cards") display_type = "list";
+                else display_type = "cards";
+            });
+            return false;
+          });
+        });
+</script>
 {% if display_type == "cards" %}
-<a href="/storage/list">
-    <button align="left" class="btn btn-dark" style="margin-bottom: 10px;">
+<a href="/storage">
+    <button onclick="change_display_type()" align="left" class="btn btn-dark" style="margin-bottom: 10px;">
         Сменить вид
     </button>
 </a>
@@ -28,8 +49,8 @@
     {% endfor %}
 </div>
 {% else %}
-<a href="/storage/cards">
-    <button align="left" class="btn btn-dark" style="margin-bottom: 10px;">
+<a href="/storage">
+    <button onclick="change_display_type()" align="left" class="btn btn-dark" style="margin-bottom: 10px;">
         Сменить вид
     </button>
 </a>
