@@ -1,5 +1,5 @@
 # Flask import:
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required
 
 # Database functions import
@@ -17,12 +17,16 @@ products_blueprint = Blueprint(
 display_type = "cards"  # or list
 
 # Storage item types page:
-@products_blueprint.route('/storage')
+@products_blueprint.route('/storage', methods=['GET', 'POST'])
 # @products_blueprint.route('/storage/<string:display_type>')
 @login_required
 def storage_item_types_page():
     global display_type
-    print(display_type)
+    if request.method == 'POST':
+        if display_type == "cards":
+            display_type = "list"
+        else:
+            display_type = "cards"
     db_sess = db_session.create_session()
     types = db_sess.query(Type).all()
     # Groups item types by 3 in row:

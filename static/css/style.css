@@ -78,3 +78,7 @@ h1, h2 {
     padding-left: 10%;
     margin-bottom: 20px;
 }
+
+.p-transparent-text::selection {
+   background: transparent;
+}
