@@ -1,53 +1,21 @@
-import os
-from urllib import request
+from flask import Blueprint, render_template, redirect
+from flask_login import login_user, login_required, logout_user
 
-from flask import Flask, Blueprint, render_template, url_for, redirect, \
-    request, jsonify, make_response
-from flask_login import LoginManager, login_required, logout_user, login_user
-
+from app import login_manager
 from data import db_session
-from data.db_session import create_session
 from data.users import User
 from forms.login import LoginForm
 from forms.user import RegisterForm
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-# blueprint = Blueprint(
-#     'storage_api',
-#     __name__,
-#     template_folder='templates'
-# )
-
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+# This blueprint describes sign in/sign up/logout pages:
+auth_blueprint = Blueprint(
+    'auth_blueprint',
+    __name__,
+    static_folder='static',
+    template_folder='templates')
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect("/")
-
-
-@app.route('/storage')
-@login_required
-def storage_page():
-    return render_template('storage.html', title='Склад')
-
-
-
-@app.route('/register', methods=['GET', 'POST'])
+@auth_blueprint.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -75,12 +43,13 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        user = db_sess.query(User).filter(
+            User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
@@ -90,19 +59,14 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-# @blueprint.route('/')
-@app.route('/')
-def main_page():
-    return render_template('main_page.html')
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
-def main():
-    global db_sess
-    db_session.global_init("db/storage.db")
-    db_sess = create_session()
-    # app.register_blueprint(jobs_api.blueprint)
-    app.run(port=8080, host='127.0.0.1')
-
-
-if __name__ == '__main__':
-    main()
+@auth_blueprint.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
