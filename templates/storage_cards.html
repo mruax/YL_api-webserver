@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h1-title">Категории товаров</h1>
+{% if display_type == "cards" %}
+<button align="left"><a href="/storage/list"><p class="p-main-text">Сменить
+    вид</p></a></button>
+{% else %}
+<button align="left"><a href="/storage/cards"><p class="p-main-text">Сменить
+    вид</p></a></button>
+{% endif %}
+<div class="container div-center2">
+    {% for i in grouped_types %}
+    <div class="row" align="center">
+        {% for j in i %}
+        <div class="card" style="width: 18rem;">
+            <img src=""
+                 class="card-img-top resize" alt="..." onerror="this.onerror=null;this.src='../static/img/no_image.png'">
+            <div class="card-body"><p class="card-text">
+                {{ j.id }} {{ j.name }} {{ j.description }}</p></div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

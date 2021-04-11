@@ -46,17 +46,16 @@
                         </a>
                         <ul aria-labelledby="navbarDropdownMenuLink"
                             class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/storage"><h5>Все
+                            <li><a class="dropdown-item" href="/storage"><h5>
+                                Все
                                 товары</h5></a></li>
                             <!--br-->
                             <ul>
+                                {% for i in types %}
                                 <li><a class="dropdown-item"
-                                       href="/storage/medicine">Медикаменты</a></li>
-                                <li><a class="dropdown-item" href="/storage/food">Продовольствие</a>
-                                </li>
-                                <li><a class="dropdown-item"
-                                       href="/storage/tech">Техника</a>
-                                </li>
+                                       href="/storage/{{i.name}}">{{ i.name
+                                    }}</a>
+                                    {% endfor %}
                             </ul>
                         </ul>
                     </li>

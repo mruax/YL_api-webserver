@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="h1-title">Что такое storage.ru?</h1>
-<p class="p-main-text" align="left">Наш сайт предоставляет возможность
-    просмотреть любые товары из наших магазинов онлайн.</p>
+<h1 class="h1-title">Категории товаров</h1>
+{% if display_type == "cards" %}
+<button align="left"><a href="/storage/list"><p class="p-main-text">Сменить вид</p></a></button>
+{% else %}
+<button align="left"><a href="/storage/cards"><p class="p-main-text">Сменить вид</p></a></button>
+{% endif %}
 <div class="container div-center2">
     <div class="row" align="center">
         <div class="card" style="width: 18rem;">
