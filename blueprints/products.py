@@ -1,5 +1,5 @@
 # Flask import:
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_login import login_required
 
 # Database functions import
@@ -13,12 +13,35 @@ products_blueprint = Blueprint(
     static_folder='static',
     template_folder='templates')
 
+# This var describes the page output form of storage items:
+display_type = "cards"  # or list
+
+# Storage item types page:
+@products_blueprint.route('/storage', methods=['GET', 'POST'])
+# @products_blueprint.route('/storage/<string:display_type>')
+@login_required
+def storage_item_types_page():
+    global display_type
+    if request.method == 'POST':
+        if display_type == "cards":
+            display_type = "list"
+        else:
+            display_type = "cards"
+    db_sess = db_session.create_session()
+    types = db_sess.query(Type).all()
+    # Groups item types by 3 in row:
+    grouped_types = [types[i:i + 3] for i in range(0, len(types), 3)]
+    return render_template(f'storage_item_types.html', title='Склад',
+                           display_type=display_type,
+                           types=types,
+                           grouped_types=grouped_types)
+
 
 # Storage items page:
-@products_blueprint.route('/storage')
-@products_blueprint.route('/storage/<string:display_type>')
+@products_blueprint.route('/storage/<string:item_type>')
+@products_blueprint.route('/storage/<string:item_type>/<string:display_type>')
 @login_required
-def storage_page(display_type="cards"):
+def storage_items_page(item_type="", display_type="cards"):
     db_sess = db_session.create_session()
     types = db_sess.query(Type).all()
     # Groups item types by 3 in row:
@@ -29,4 +52,5 @@ def storage_page(display_type="cards"):
         display_type = "cards"
     return render_template(f'storage_{display_type}.html', title='Склад',
                            display_type=display_type,
+                           types=types,
                            grouped_types=grouped_types)

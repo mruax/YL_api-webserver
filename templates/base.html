@@ -51,11 +51,13 @@
                                 товары</h5></a></li>
                             <!--br-->
                             <ul>
-                                {% for i in types %}
+                                {% for i in types[:3] %}
                                 <li><a class="dropdown-item"
                                        href="/storage/{{i.name}}">{{ i.name
                                     }}</a>
-                                    {% endfor %}
+                                </li>
+                                {% endfor %}
+                                <p class="p-transparent-text">...</p>
                             </ul>
                         </ul>
                     </li>
