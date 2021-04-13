@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h1-title">Работа</h1>
+<p class="p-main-text" align="left">Для доступа к функциям разработчика необходимо подтвердить адрес электронной почты.</p>
+<form method="post" class="form-group">
+    <input type="email" class="form-control" name="email" placeholder="Адрес (как в аккаунте)">
+    <button type="submit" class="btn btn-primary">Прислать письмо</button>
+    <input type="text" class="form-control" name="code" placeholder="Введите код">
+    <button type="submit" class="btn btn-primary">Подтвердить код</button>
+</form>
+
+{% endblock %}
