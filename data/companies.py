@@ -1,34 +1,36 @@
 import sqlalchemy
 from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from .db_session import SqlAlchemyBase
 
 
-class User(SqlAlchemyBase, UserMixin, SerializerMixin):
-    __tablename__ = 'users'
+class Company(SqlAlchemyBase, UserMixin, SerializerMixin):
+    __tablename__ = 'companies'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True, unique=True,
                            nullable=False)
+    name = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    address = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    phone_number = sqlalchemy.Column(sqlalchemy.String, unique=True)
+    post_address = sqlalchemy.Column(sqlalchemy.String, unique=True)
+    description = sqlalchemy.Column(sqlalchemy.String)
+    INN = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    KPP = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    ORGN = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    OKPO = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
     # name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    login = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    email = sqlalchemy.Column(sqlalchemy.String,
-                              index=True, unique=True, nullable=True)
+    # login = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    # hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    # email = sqlalchemy.Column(sqlalchemy.String,
+    #                           index=True, unique=True, nullable=True)
     # modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
     #                                   default=datetime.datetime.now,
     #                                   nullable=True)
     # jobs = orm.relation("Jobs", back_populates='user')
     # news = orm.relation("News", back_populates='user')
-    permissions = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    # permissions = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     # def __repr__(self):
     #     print(f"0")
-
-    def set_password(self, password):
-        self.hashed_password = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.hashed_password, password)

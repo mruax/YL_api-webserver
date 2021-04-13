@@ -4,6 +4,8 @@ from flask_login import login_required
 
 # Database functions import
 from data import db_session
+from data.companies import Company
+from data.items import Item
 from data.types import Type
 
 # This blueprint describes storage items pages:
@@ -19,7 +21,6 @@ display_type = "cards"  # or list
 
 # Storage item types page:
 @products_blueprint.route('/storage', methods=['GET', 'POST'])
-# @products_blueprint.route('/storage/<string:display_type>')
 @login_required
 def storage_item_types_page():
     global display_type
@@ -30,7 +31,7 @@ def storage_item_types_page():
             display_type = "cards"
     db_sess = db_session.create_session()
     types = db_sess.query(Type).all()
-    # Groups item types by 3 in row:
+    # Group item types by 3 in row:
     grouped_types = [types[i:i + 3] for i in range(0, len(types), 3)]
     return render_template(f'storage_item_types.html', title='Категории товаров',
                            display_type=display_type,
@@ -40,18 +41,22 @@ def storage_item_types_page():
 
 # Storage items page:
 @products_blueprint.route('/storage/<string:item_type>')
-@products_blueprint.route('/storage/<string:item_type>/<string:display_type>')
 @login_required
-def storage_items_page(item_type="", display_type="cards"):
+def storage_items_page(item_type=""):
+    global display_type
+    if request.method == 'POST':
+        if display_type == "cards":
+            display_type = "list"
+        else:
+            display_type = "cards"
     db_sess = db_session.create_session()
     types = db_sess.query(Type).all()
-    # Groups item types by 3 in row:
-    grouped_types = [types[i:i + 3] for i in range(0, len(types), 3)]
-    # items = db_sess.query(Item).all()
-    # companies = db_sess.query(Company).all()
-    if display_type != "cards" and display_type != "list":
-        display_type = "cards"
-    return render_template(f'storage_{display_type}.html', title='Товары',
+    items = db_sess.query(Item).all()
+    companies = db_sess.query(Company).all()
+    # Group items by 3 in row:
+    grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]
+    return render_template(f'storage_items.html',
+                           title='Товары',
                            display_type=display_type,
-                           types=types,
-                           grouped_types=grouped_types)
+                           types=types, items=items, companies=companies,
+                           grouped_items=grouped_items)
