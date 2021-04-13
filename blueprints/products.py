@@ -16,6 +16,7 @@ products_blueprint = Blueprint(
 # This var describes the page output form of storage items:
 display_type = "cards"  # or list
 
+
 # Storage item types page:
 @products_blueprint.route('/storage', methods=['GET', 'POST'])
 # @products_blueprint.route('/storage/<string:display_type>')
@@ -31,7 +32,7 @@ def storage_item_types_page():
     types = db_sess.query(Type).all()
     # Groups item types by 3 in row:
     grouped_types = [types[i:i + 3] for i in range(0, len(types), 3)]
-    return render_template(f'storage_item_types.html', title='Склад',
+    return render_template(f'storage_item_types.html', title='Категории товаров',
                            display_type=display_type,
                            types=types,
                            grouped_types=grouped_types)
@@ -50,7 +51,7 @@ def storage_items_page(item_type="", display_type="cards"):
     # companies = db_sess.query(Company).all()
     if display_type != "cards" and display_type != "list":
         display_type = "cards"
-    return render_template(f'storage_{display_type}.html', title='Склад',
+    return render_template(f'storage_{display_type}.html', title='Товары',
                            display_type=display_type,
                            types=types,
                            grouped_types=grouped_types)
