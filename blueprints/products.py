@@ -40,7 +40,7 @@ def storage_item_types_page():
 
 
 # Storage items page:
-@products_blueprint.route('/storage/<string:item_type>')
+@products_blueprint.route('/storage/<string:item_type>', methods=['GET', 'POST'])
 @login_required
 def storage_items_page(item_type=""):
     global display_type
@@ -51,7 +51,7 @@ def storage_items_page(item_type=""):
             display_type = "cards"
     db_sess = db_session.create_session()
     types = db_sess.query(Type).all()
-    items = db_sess.query(Item).all()
+    items = db_sess.query(Item).filter(Item.type == item_type).all()
     companies = db_sess.query(Company).all()
     # Group items by 3 in row:
     grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]
