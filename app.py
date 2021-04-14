@@ -2,6 +2,8 @@
 from flask import Flask, jsonify, make_response
 from flask_login import LoginManager
 
+import os
+
 # Blueprints import:
 from blueprints.auth import auth_blueprint
 from blueprints.general import general_blueprint
@@ -54,7 +56,8 @@ def main():
     global db_sess
     db_session.global_init("db/storage.db")
     db_sess = create_session()
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 if __name__ == '__main__':
