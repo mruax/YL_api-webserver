@@ -1,7 +1,6 @@
 # Flask import:
 from flask import Flask, jsonify, make_response
 from flask_login import LoginManager
-from flask_ngrok import run_with_ngrok
 
 # Blueprints import:
 from blueprints.auth import auth_blueprint
@@ -14,7 +13,6 @@ from data.users import User
 
 # App initialization:
 app = Flask(__name__, instance_relative_config=True)
-run_with_ngrok(app)
 app.config.from_object('instance.config')
 app.config.from_pyfile('config.py')
 login_manager = LoginManager()
