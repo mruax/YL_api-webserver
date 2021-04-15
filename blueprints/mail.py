@@ -34,10 +34,11 @@ def get_form():
 # Mail send:
 @mail_blueprint.route('/work', methods=["POST"])
 def post_form():
+    # TODO: the requested mail must be equal to users mail
     email = request.values.get('email')
     try:
         send_mail(email, 'Подтверждение электронного адреса',
-                  f'Привет! Для того, чтобы получить доступ к функциям разработчика необходимо ввести на сайте пароль: '
+                  f'Привет! Для того, чтобы получить доступ ко всем функциям необходимо ввести на сайте пароль: '
                   f'{randint(100000, 999999)} '
                   f'Вы можете ознакомиться с пользовательским соглашением в прикрепленном файле. Благодарим за использование нашего сервиса!',
                   ['static\\content\\terms_of_use.pdf'])
