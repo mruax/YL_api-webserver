@@ -21,13 +21,13 @@ mail_blueprint = Blueprint(
 
 
 # Mail page:
-@mail_blueprint.route('/mail', methods=["GET"])
+@mail_blueprint.route('/work', methods=["GET"])
 def get_form():
     return render_template('mail_me.html')
 
 
 # Mail send:
-@mail_blueprint.route('/mail', methods=["POST"])
+@mail_blueprint.route('/work', methods=["POST"])
 def post_form():
     email = request.values.get('email')
     try:
