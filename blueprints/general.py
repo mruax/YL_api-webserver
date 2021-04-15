@@ -1,10 +1,11 @@
 # Flask import:
 from flask import Blueprint, render_template
 
-# This blueprint describes main page:
+# Database functions import:
 from data import db_session
 from data.types import Type
 
+# This blueprint describes main page:
 general_blueprint = Blueprint(
     'general_blueprint',
     __name__,

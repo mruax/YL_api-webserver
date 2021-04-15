@@ -39,6 +39,7 @@ def reqister():
         user = User(
             login=form.login.data,
             email=form.email.data,
+            permissions="user"
         )
         user.set_password(form.password.data)
         db_sess.add(user)

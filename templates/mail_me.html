@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h1-title">Работа</h1>
+<p align="left" class="p-main-text">Для того, чтобы получить доступ к
+    добавлению/редактированию/просмотру своих товаров и компаний, необходимо
+    подтвердить адрес электронной почты.</p>
+<div class="container div-center2">
+    <form class="form-group" method="post">
+        <input class="form-control" name="email" type="email">
+        <button class="btn btn-primary" type="submit">Прислать письмо</button>
+    </form>
+</div>
+{% endblock %}

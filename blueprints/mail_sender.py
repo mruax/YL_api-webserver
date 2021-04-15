@@ -1,6 +1,6 @@
-import smtplib
 import mimetypes
 import os
+import smtplib
 from email import encoders
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
@@ -48,7 +48,7 @@ def attach_file(msg, f):
         'audio': MIMEAudio
     }
 
-    filename= os.path.basename(f)
+    filename = os.path.basename(f)
     ctype, encoding = mimetypes.guess_type(filename)
     if ctype is None or encoding is not None:
         ctype = 'application/octet-stream'
