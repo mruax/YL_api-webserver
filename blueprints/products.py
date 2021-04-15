@@ -60,3 +60,47 @@ def storage_items_page(item_type=""):
                            display_type=display_type,
                            types=types, items=items, companies=companies,
                            grouped_items=grouped_items)
+
+
+# Storage companies page:
+@products_blueprint.route('/companies', methods=['GET', 'POST'])
+@login_required
+def storage_companies_page():
+    global display_type
+    if request.method == 'POST':
+        if display_type == "cards":
+            display_type = "list"
+        else:
+            display_type = "cards"
+    db_sess = db_session.create_session()
+    types = db_sess.query(Type).all()
+    companies = db_sess.query(Company).all()
+    # Group companies by 3 in row:
+    grouped_companies = [companies[i:i + 3] for i in range(0, len(companies), 3)]
+    return render_template(f'storage_companies.html', title='Компании',
+                           display_type=display_type,
+                           types=types, companies=companies,
+                           grouped_companies=grouped_companies)
+
+
+# Storage company page:
+@products_blueprint.route('/company/<string:company>', methods=['GET', 'POST'])
+@login_required
+def storage_items_page(company_name=""):
+    global display_type
+    if request.method == 'POST':
+        if display_type == "cards":
+            display_type = "list"
+        else:
+            display_type = "cards"
+    db_sess = db_session.create_session()
+    types = db_sess.query(Type).all()
+    company = db_sess.query(Company).filter(Company.name == company_name).all()
+    items = db_sess.query(Item).filter(Item.company == company_name).all()
+    # Group items by 3 in row:
+    grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]
+    return render_template(f'storage_company.html',
+                           title='Компания',
+                           display_type=display_type,
+                           types=types, items=items, company=company,
+                           grouped_items=grouped_items)

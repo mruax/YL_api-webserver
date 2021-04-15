@@ -44,7 +44,7 @@
            href="/storage/{{ item_type.name }}">
             <div class="d-flex justify-content-between">
                 <h5 class="mb-1">{{ item_type.name }}</h5>
-                <small>{{ item_type.id }}</small>
+                <small>{{ loop.index }}</small>
             </div>
             <div class="d-flex justify-content-between">
                 <p class="mb-1"> {{ item_type.description }}</p>

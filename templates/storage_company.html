@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h1-title">{{ title }}</h1>
+<div class="media">
+    <img alt="..." style="margin-top: 10px"
+                     class="align-self-start mr-3 resize"
+                     onerror="this.onerror=null;this.src='../static/img/no_image.png'"
+                     src="">
+  <div class="media-body">
+    <h5 class="mt-0">Top-aligned media</h5>
+    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+    <p>Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+  </div>
+</div>
+{% endblock %}
