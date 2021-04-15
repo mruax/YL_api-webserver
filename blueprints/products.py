@@ -84,9 +84,9 @@ def storage_companies_page():
 
 
 # Storage company page:
-@products_blueprint.route('/company/<string:company>', methods=['GET', 'POST'])
+@products_blueprint.route('/companies/<string:company_name>', methods=['GET', 'POST'])
 @login_required
-def storage_items_page(company_name=""):
+def storage_company_page(company_name=""):
     global display_type
     if request.method == 'POST':
         if display_type == "cards":
@@ -95,7 +95,7 @@ def storage_items_page(company_name=""):
             display_type = "cards"
     db_sess = db_session.create_session()
     types = db_sess.query(Type).all()
-    company = db_sess.query(Company).filter(Company.name == company_name).all()
+    company = db_sess.query(Company).filter(Company.name == company_name).first()
     items = db_sess.query(Item).filter(Item.company == company_name).all()
     # Group items by 3 in row:
     grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]

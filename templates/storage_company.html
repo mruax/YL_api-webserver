@@ -2,15 +2,74 @@
 
 {% block content %}
 <h1 class="h1-title">{{ title }}</h1>
-<div class="media">
-    <img alt="..." style="margin-top: 10px"
-                     class="align-self-start mr-3 resize"
+<form method="POST">
+    <a href="/storage">
+        <button align="left" class="btn btn-dark" style="margin-bottom: 10px;">
+            Сменить вид
+        </button>
+    </a>
+</form>
+<div class="" style="background-color: lightgray; border: 3px double dimgray; margin: 10px;" align="left">
+  <div class="container">
+  <div class="row">
+    <img alt="..." style="margin: 10px; height: 200px; width: auto"
+                     class="resize"
                      onerror="this.onerror=null;this.src='../static/img/no_image.png'"
                      src="">
-  <div class="media-body">
-    <h5 class="mt-0">Top-aligned media</h5>
-    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-    <p>Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+    <div class="col" style="margin: 10px; margin-bottom: 10px;">
+      <h5 class="mt-0">{{ company.name }}</h5>
+      <p>Описание: {{ company.description }}</p>
+      <p>Адрес: {{ company.address }}; Почтовый адрес: {{ company.post_address }}; Номер телефона: {{ company.phone_number }}</p>
+      <p>ИНН: {{ company.INN }}; КПП: {{ company.KPP }}</p>
+      <p>ОРГН: {{ company.ORGN }}; ОКПО: {{ company.OKPO }}</p>
+    </div>
+  </div>
   </div>
 </div>
+{% if display_type == "cards" %}
+<div class="container div-center2">
+    {% for item_row in grouped_items %}
+    <div align="center" class="row">
+        {% for item in item_row %}
+        <div class="card"
+             style="width: 18rem; background-color: lightgray; margin: 5px; margin-bottom: 20px;">
+            <a href="/storage/{{ item.type }}/{{ item.name }}">
+                <img alt="..." style="margin-top: 10px"
+                     class="card-img-top resize"
+                     onerror="this.onerror=null;this.src='../static/img/no_image.png'"
+                     src="">
+            </a>
+            <div class="card-body">
+                <p class="card-text">
+                    <b>{{ item.name }}</b>
+                </p>
+                <p class="card-text">
+                    {{ item.description }}
+                </p>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div align="center" class="container div-center2">
+    <div class="list-group">
+        {% for item in items %}
+        <a class="list-group-item list-group-item-action" style="background-color: lightgray"
+           href="/storage/{{ item.type }}/{{ item.name }}">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-1">{{ item.name }}</h5>
+                <small>{{ loop.index }}</small>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p class="mb-1"> {{ item.description }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}
