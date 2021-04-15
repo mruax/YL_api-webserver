@@ -8,6 +8,9 @@ from flask import render_template, request, Blueprint
 
 # Import blueprints:
 from blueprints.mail_sender import send_mail
+# Database functions import:
+from data import db_session
+from data.types import Type
 
 # Parse a .env file and load all mail variables:
 load_dotenv()
@@ -23,7 +26,9 @@ mail_blueprint = Blueprint(
 # Mail page:
 @mail_blueprint.route('/work', methods=["GET"])
 def get_form():
-    return render_template('mail_me.html')
+    db_sess = db_session.create_session()
+    types = db_sess.query(Type).all()
+    return render_template('mail_me.html', types=types)
 
 
 # Mail send:
