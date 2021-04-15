@@ -7,6 +7,7 @@ from flask_login import LoginManager
 # Blueprints import:
 from blueprints.auth import auth_blueprint
 from blueprints.general import general_blueprint
+from blueprints.mail import mail_blueprint
 from blueprints.products import products_blueprint
 # Database functions import:
 from data import db_session
@@ -24,8 +25,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # Blueprints registration:
-app.register_blueprint(general_blueprint)
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(general_blueprint)
+app.register_blueprint(mail_blueprint)
 app.register_blueprint(products_blueprint)
 
 
