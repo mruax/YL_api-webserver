@@ -115,5 +115,6 @@ def main():
     app.run()
 
 
+# Protects users from accidentally invoking the script:
 if __name__ == '__main__':
     main()

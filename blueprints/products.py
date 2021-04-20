@@ -3,12 +3,12 @@ from flask import Blueprint, render_template, request
 from flask_login import login_required
 
 # Database functions import
-from data import db_session
 from data.companies import Company
+from data.db_session import create_session
 from data.items import Item
 from data.types import Type
 
-# This blueprint describes storage items pages:
+# This blueprint describes storage pages:
 products_blueprint = Blueprint(
     'products_blueprint',
     __name__,
@@ -16,16 +16,69 @@ products_blueprint = Blueprint(
     template_folder='templates')
 
 # This var describes the page output form of storage items:
-display_type = "cards"  # cards(def.) or list
+display_type = "cards"  # cards(default) or list
 
 
 def change_view():
-    """Change display type to the opposite."""
+    """Changes display type to the opposite."""
     global display_type
     if display_type == "cards":
         display_type = "list"
     else:
         display_type = "cards"
+
+
+def get_types_extended():
+    """
+    Get item types from database and also group them by 3 in row.
+
+    :return: List of item types
+    """
+    db_sess = create_session()  # Create database session
+    types = db_sess.query(Type).all()  # Get item types from database
+    db_sess.close()  # Shut down database session
+    # Group item types by 3 in row:
+    grouped_types = [types[i:i + 3] for i in range(0, len(types), 3)]
+    return types, grouped_types
+
+
+def get_items_extended(item_type="", company_name=""):
+    """
+    Get items from database and also group them by 3 in row.
+
+    :return: List of items
+    """
+    db_sess = create_session()  # Create database session
+    if item_type:  # If item type specified
+        items = db_sess.query(Item).filter(Item.type == item_type).all()
+    elif company_name:  # If company name specified
+        items = db_sess.query(Item).filter(Item.company == company_name).all()
+    else:
+        items = db_sess.query(Item).all()  # Get items from database
+    # Group items by 3 in row:
+    grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]
+    db_sess.close()  # Shut down database session
+    return items, grouped_items
+
+
+def get_companies_extended(company_name=""):
+    """
+    Get companies from database and also group them by 3 in row.
+
+    :return: List of items
+    """
+    db_sess = create_session()  # Create database session
+    if not company_name:  # If company name not specified
+        companies = db_sess.query(Company).all()  # Get items from database
+        # Group companies by 3 in row:
+        grouped_companies = [companies[i:i + 3] for i in
+                             range(0, len(companies), 3)]
+    else:
+        companies = db_sess.query(Company).filter(
+            Company.name == company_name).first()
+        grouped_companies = ""
+    db_sess.close()  # Shut down database session
+    return companies, grouped_companies
 
 
 @products_blueprint.route('/storage', methods=['GET', 'POST'])
@@ -38,14 +91,10 @@ def storage_item_types_page():
     """
     global display_type
     if request.method == 'POST': change_view()
-    db_sess = db_session.create_session()
-    types = db_sess.query(Type).all()
-    # Group item types by 3 in row:
-    grouped_types = [types[i:i + 3] for i in range(0, len(types), 3)]
-    return render_template(f'storage_item_types.html',
+    types, grouped_types = get_types_extended()
+    return render_template(f'storage_item_types.html', types=types,
                            title='Категории товаров',
                            display_type=display_type,
-                           types=types,
                            grouped_types=grouped_types)
 
 
@@ -62,12 +111,9 @@ def storage_items_page(item_type=""):
     """
     global display_type
     if request.method == 'POST': change_view()
-    db_sess = db_session.create_session()
-    types = db_sess.query(Type).all()
-    items = db_sess.query(Item).filter(Item.type == item_type).all()
-    companies = db_sess.query(Company).all()
-    # Group items by 3 in row:
-    grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]
+    types, _ = get_types_extended()
+    items, grouped_items = get_items_extended(item_type)
+    companies, _ = get_companies_extended()
     return render_template(f'storage_items.html',
                            title='Товары',
                            display_type=display_type,
@@ -85,12 +131,8 @@ def storage_companies_page():
     """
     global display_type
     if request.method == 'POST': change_view()
-    db_sess = db_session.create_session()
-    types = db_sess.query(Type).all()
-    companies = db_sess.query(Company).all()
-    # Group companies by 3 in row:
-    grouped_companies = [companies[i:i + 3] for i in
-                         range(0, len(companies), 3)]
+    types, _ = get_types_extended()
+    companies, grouped_companies = get_companies_extended()
     return render_template(f'storage_companies.html', title='Компании',
                            display_type=display_type,
                            types=types, companies=companies,
@@ -110,13 +152,9 @@ def storage_company_page(company_name=""):
     """
     global display_type
     if request.method == 'POST': change_view()
-    db_sess = db_session.create_session()
-    types = db_sess.query(Type).all()
-    company = db_sess.query(Company).filter(
-        Company.name == company_name).first()
-    items = db_sess.query(Item).filter(Item.company == company_name).all()
-    # Group items by 3 in row:
-    grouped_items = [items[i:i + 3] for i in range(0, len(items), 3)]
+    items, grouped_items = get_items_extended(company_name=company_name)
+    types, _ = get_types_extended()
+    company, _ = get_companies_extended(company_name)
     return render_template(f'storage_company.html',
                            title='Компания',
                            display_type=display_type,
