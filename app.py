@@ -30,6 +30,21 @@ app.register_blueprint(general_blueprint)
 app.register_blueprint(mail_blueprint)
 app.register_blueprint(products_blueprint)
 
+# Database setup:
+db_session.global_init("db/storage.db")
+
+
+def get_types():
+    """
+    Get item types from database.
+
+    :return: List of item types
+    """
+    db_sess = create_session()  # Create database session
+    types = db_sess.query(Type).all()  # Get item types from database
+    db_sess.close()  # Shut down database session
+    return types
+
 
 @login_manager.unauthorized_handler
 def unauth_handler():
@@ -38,11 +53,13 @@ def unauth_handler():
 
     :return: HTML page with appropriate code
     """
-    types = db_sess.query(Type).all()
+    types = get_types()
     return render_template('error_handler.html', types=types, code="401",
                            name="Unauthorized",
-                           description="User is not authorized to access a resource.",
-                           message="Чтобы получить доступ к этой странице необходима авторизация")
+                           description="User is not authorized to access a "
+                                       "resource.",
+                           message="Чтобы получить доступ к этой странице "
+                                   "необходима авторизация.")
 
 
 @app.errorhandler(404)
@@ -54,10 +71,10 @@ def not_found(error):
     :type error: werkzeug.exceptions.NotFound
     :return: HTML page with appropriate code
     """
-    types = db_sess.query(Type).all()
+    types = get_types()
     return render_template('error_handler.html', types=types, code=error.code,
                            name=error.name, description=error.description,
-                           message="Страница не найдена")
+                           message="Страница не найдена.")
 
 
 @app.errorhandler(500)
@@ -69,10 +86,10 @@ def internal_error(error):
     :type error: werkzeug.exceptions.InternalServerError
     :return: HTML page with appropriate code
     """
-    types = db_sess.query(Type).all()
+    types = get_types()
     return render_template('error_handler.html', types=types, code=error.code,
                            name=error.name, description=error.description,
-                           message="Ошибка на стороне сервера")
+                           message="Ошибка на стороне сервера.")
 
 
 @login_manager.user_loader
@@ -82,24 +99,20 @@ def load_user(user_id):
 
     :return: Database user by id
     """
-    return db_sess.query(User).get(user_id)
+    db_sess = create_session()  # Create database session
+    user = db_sess.query(User).get(user_id)  # Get user by id from database
+    db_sess.close()  # Shut down database session
+    return user
 
 
 def main():
     """Core of the program, starts the server."""
-    global db_sess
-    db_session.global_init("db/storage.db")
-    db_sess = create_session()
-
     # This part is needed to run server on heroku:
     # port = int(os.environ.get("PORT", 5000))
     # app.run(host='0.0.0.0', port=port)
 
     # If you want to run server on ngrok use this:
     app.run()
-
-    # Shut down database session:
-    db_sess.close()
 
 
 if __name__ == '__main__':
