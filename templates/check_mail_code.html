@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 align="center" class="h1-title">{{ code }} {{ name }}</h1>
+<p align="center" style="font-size: 20px; margin-bottom: 20px;">{{ description }}</p>
+<p align="left" class="p-main-text">{{ message }}</p>
+<div class="container div-center2">
+    <form class="form-group" method="post" action="" novalidate>
+        {{ code_form.hidden_tag() }}
+        <input class="form-control" name="code" placeholder="Введите код">
+        {% for error in code_form.code.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">Проверить</button>
+    </form>
+</div>
+{% endblock %}

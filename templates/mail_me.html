@@ -5,10 +5,20 @@
 <p align="left" class="p-main-text">Для того, чтобы получить доступ к
     добавлению/редактированию/просмотру своих товаров и компаний, необходимо
     подтвердить адрес электронной почты.</p>
+{% if permission == "user" %}
 <div class="container div-center2">
-    <form class="form-group" method="post">
-        <input class="form-control" name="email" type="email">
+    <form class="form-group" method="post" action="">
+        {{ form.hidden_tag() }}
+        <input class="form-control" name="email" type="email" placeholder="Введите почту">
+        {% for error in form.email.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
         <button class="btn btn-primary" type="submit">Прислать письмо</button>
     </form>
 </div>
+{% else %}
+<h4 align="left" class="p-main-text">Почта подтверждена. Все функции доступны.</h4>
+{% endif %}
 {% endblock %}
