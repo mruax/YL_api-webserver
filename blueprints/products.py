@@ -42,7 +42,7 @@ def get_types_extended():
     return types, grouped_types
 
 
-def get_items_extended(item_type="", company_name=""):
+def get_items_extended(item_type="", company_name="", item_id=1):
     """
     Get items from database and also group them by 3 in row.
 
@@ -53,6 +53,8 @@ def get_items_extended(item_type="", company_name=""):
         items = db_sess.query(Item).filter(Item.type == item_type).all()
     elif company_name:  # If company name specified
         items = db_sess.query(Item).filter(Item.company == company_name).all()
+    elif item_id:  # If item id specified
+        items = db_sess.query(Item).filter(Item.id == item_id).all()
     else:
         items = db_sess.query(Item).all()  # Get items from database
     # Group items by 3 in row:
@@ -119,6 +121,27 @@ def storage_items_page(item_type=""):
                            display_type=display_type,
                            types=types, items=items, companies=companies,
                            grouped_items=grouped_items)
+
+
+@products_blueprint.route('/storage/<string:item_type>/<int:item_id>',
+                          methods=['GET', 'POST'])
+@login_required
+def storage_item_page(item_type="", item_id=1):
+    """
+    Storage item page.
+
+    :param item_type: Requested item type
+    :type item_type: str
+    :param item_id: Requested item id
+    :type item_id: int
+    :return: HTML page with appropriate code
+    """
+    global display_type
+    item, _ = get_items_extended(item_id=item_id)
+    types, _ = get_types_extended()
+    return render_template(f'storage_item.html',
+                           title='Товар', display_type=display_type,
+                           types=types, item=item[0], item_type=item_type)
 
 
 @products_blueprint.route('/companies', methods=['GET', 'POST'])

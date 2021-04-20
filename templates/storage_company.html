@@ -9,22 +9,26 @@
         </button>
     </a>
 </form>
-<div class="" style="background-color: lightgray; border: 3px double dimgray; margin: 10px;" align="left">
-  <div class="container">
-  <div class="row">
-    <img alt="..." style="margin: 10px; height: 200px; width: auto"
-                     class="resize"
-                     onerror="this.onerror=null;this.src='../static/img/no_image.png'"
-                     src="">
-    <div class="col" style="margin: 10px; margin-bottom: 10px;">
-      <h5 class="mt-0">{{ company.name }}</h5>
-      <p>Описание: {{ company.description }}</p>
-      <p>Адрес: {{ company.address }}; Почтовый адрес: {{ company.post_address }}; Номер телефона: {{ company.phone_number }}</p>
-      <p>ИНН: {{ company.INN }}; КПП: {{ company.KPP }}</p>
-      <p>ОРГН: {{ company.ORGN }}; ОКПО: {{ company.OKPO }}</p>
+<div align="left"
+     class=""
+     style="background-color: lightgray; border: 3px double dimgray; margin: 10px;">
+    <div class="container">
+        <div class="row">
+            <img alt="..." class="resize"
+                 onerror="this.onerror=null;this.src='../static/img/no_image.png'"
+                 src=""
+                 style="margin: 10px; height: 200px; width: auto">
+            <div class="col" style="margin: 10px; margin-bottom: 10px;">
+                <h5 class="mt-0">{{ company.name }}</h5>
+                <p>Описание: {{ company.description }}</p>
+                <p>Адрес: {{ company.address }}; Почтовый адрес: {{
+                    company.post_address }}; Номер телефона: {{
+                    company.phone_number }}</p>
+                <p>ИНН: {{ company.INN }}; КПП: {{ company.KPP }}</p>
+                <p>ОРГН: {{ company.ORGN }}; ОКПО: {{ company.OKPO }}</p>
+            </div>
+        </div>
     </div>
-  </div>
-  </div>
 </div>
 <h5>Товары компании:</h5>
 {% if display_type == "cards" %}
@@ -34,11 +38,11 @@
         {% for item in item_row %}
         <div class="card"
              style="width: 18rem; background-color: lightgray; margin: 5px; margin-bottom: 20px;">
-            <a href="/storage/{{ item.type }}/{{ item.name }}">
-                <img alt="..." style="margin-top: 10px"
-                     class="card-img-top resize"
+            <a href="/storage/{{ item.type }}/{{ item.id }}">
+                <img alt="..." class="card-img-top resize"
                      onerror="this.onerror=null;this.src='../static/img/no_image.png'"
-                     src="">
+                     src=""
+                     style="margin-top: 10px">
             </a>
             <div class="card-body">
                 <p class="card-text">
@@ -58,8 +62,9 @@
 <div align="center" class="container div-center2">
     <div class="list-group">
         {% for item in items %}
-        <a class="list-group-item list-group-item-action" style="background-color: lightgray"
-           href="/storage/{{ item.type }}/{{ item.name }}">
+        <a class="list-group-item list-group-item-action"
+           href="/storage/{{ item.type }}/{{ item.id }}"
+           style="background-color: lightgray">
             <div class="d-flex justify-content-between">
                 <h5 class="mb-1">{{ item.name }}</h5>
                 <small>{{ loop.index }}</small>

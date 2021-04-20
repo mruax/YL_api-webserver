@@ -21,7 +21,6 @@ class Item(SqlAlchemyBase, UserMixin, SerializerMixin):
     company = sqlalchemy.Column(sqlalchemy.String, ForeignKey('companies.name'))
 
     date = sqlalchemy.Column(sqlalchemy.String)
-    rating = sqlalchemy.Column(sqlalchemy.String)
     image = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String)
 
