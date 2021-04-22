@@ -5,7 +5,7 @@ from random import randint
 from dotenv import load_dotenv
 # Flask functions import:
 from flask import render_template, request, Blueprint, redirect, abort
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 # Import mail functions:
 from flask_wtf import FlaskForm
@@ -53,6 +53,7 @@ class MailCodeForm(FlaskForm):
 
 
 @mail_blueprint.route('/work', methods=["GET"])
+@login_required
 def get_form():
     """
     Mail page.
@@ -60,13 +61,14 @@ def get_form():
     :return: HTML page with appropriate code
     """
     db_sess = create_session()  # Create database session
-    user = db_sess.query(User).filter(User.email == current_user.email).all()
+    user = db_sess.query(User).filter(User.email == current_user.email).first()
     db_sess.close()  # Shut down database session
     return render_template('mail_me.html', types=get_types(), form=MailForm(),
-                           permission=user[0].permissions)
+                           permission=user.permissions)
 
 
 @mail_blueprint.route('/work', methods=["POST"])
+@login_required
 def post_form():
     """
     Mail send.
@@ -104,6 +106,7 @@ def post_form():
 
 
 @mail_blueprint.route('/check', methods=["GET"])
+@login_required
 def get_code_form():
     """
     Check mail code page.
@@ -118,6 +121,7 @@ def get_code_form():
 
 
 @mail_blueprint.route('/check', methods=["POST"])
+@login_required
 def post_code_form():
     """
     Verify mail code.
@@ -143,3 +147,22 @@ def post_code_form():
                                            "entered one.",
                                message="Введенный код должен совпадать с "
                                        "кодом на вашей почте.")
+
+
+@mail_blueprint.route('/verify')
+@login_required
+def verify_page():
+    """
+    Verify page.
+
+    :return: HTML page with appropriate code
+    """
+    db_sess = create_session()  # Create database session
+    user = db_sess.query(User).filter(User.email == current_user.email).first()
+    if user:
+        if user.permissions == "user":
+            user.permissions = "cooperator"
+            db_sess.commit()
+        db_sess.close()  # Shut down database session
+        return redirect('/work')
+    abort(404)

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h1-title">Ваши творения</h1>
+<p class="p-main-text" align="left">Наш сайт предоставляет возможность не только просматривать товары из наших магазинов, но и дает сотрудникам возможность добавлять и редактировать их. Вы также можете определить собственный тип товара и зарегистрировать свою компанию.</p>
+{% if permission == "cooperator" %}
+<div class="container div-center2">
+    <div class="row" align="center">
+        <div class="card" style="width: 18rem;">
+            <a href="/create/product"><img src="static/img/card_product_img1.jpg" class="card-img-top resize" alt="..."></a>
+            <div class="card-body"><p class="card-text">Добавить товар</p></div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <a href="/create/type"><img src="static/img/card_product_img2.jpg" class="card-img-top resize" alt="..."></a>
+            <div class="card-body"><p class="card-text">Добавить тип товара</p></div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <a href="/create/company"><img src="static/img/card_product_img3.jpg" class="card-img-top resize" alt="..."></a>
+            <div class="card-body"><p class="card-text">Зарегестрировать компанию</p></div>
+        </div>
+    </div>
+</div>
+{% else %}
+<p class="p-main-text" align="left">Для получения доступа ко всем функциям необходимо подтвердить почту</p>
+<a href="/work"><button class="btn btn-outline-success" type="button">Подтвердить почту</button></a>
+{% endif %}
+{% endblock %}

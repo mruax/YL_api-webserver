@@ -1,6 +1,6 @@
 # Flask import:
 from flask import Blueprint, render_template, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 # Database functions import
 from data.companies import Company
@@ -9,6 +9,8 @@ from data.items import Item
 from data.types import Type
 
 # This blueprint describes storage pages:
+from data.users import User
+
 products_blueprint = Blueprint(
     'products_blueprint',
     __name__,
@@ -183,3 +185,19 @@ def storage_company_page(company_name=""):
                            display_type=display_type,
                            types=types, items=items, company=company,
                            grouped_items=grouped_items)
+
+
+@products_blueprint.route('/create', methods=['GET', 'POST'])
+@login_required
+def create_page():
+    """
+    Create page content.
+
+    :return: HTML page with appropriate code
+    """
+    types, _ = get_types_extended()
+    db_sess = create_session()  # Create database session
+    user = db_sess.query(User).filter(User.email == current_user.email).first()
+    db_sess.close()  # Shut down database session
+    return render_template('create_menu.html', types=types,
+                           permission=user.permissions)
