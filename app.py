@@ -110,11 +110,11 @@ def load_user(user_id):
 def main():
     """Core of the program, starts the server."""
     # This part is needed to run server on heroku:
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
     # If you want to run server on ngrok or local server use this:
-    app.run()
+    # app.run()
 
 
 # Protects users from accidentally invoking the script:
