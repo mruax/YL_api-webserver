@@ -272,7 +272,7 @@ def create_object_page(object_name=""):
             if message == "":
                 message = check_grammar(item_form)
             if message:
-                return render_template('create_product.html', types=types,
+                return render_template('create_item.html', types=types,
                                        form=item_form,
                                        message=message)
             db_sess = create_session()  # Create database session
