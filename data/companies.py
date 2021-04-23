@@ -1,5 +1,7 @@
 import sqlalchemy
 from flask_login import UserMixin
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
@@ -16,10 +18,14 @@ class Company(SqlAlchemyBase, UserMixin, SerializerMixin):
     phone_number = sqlalchemy.Column(sqlalchemy.String, unique=True)
     post_address = sqlalchemy.Column(sqlalchemy.String, unique=True)
     description = sqlalchemy.Column(sqlalchemy.String)
-    INN = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
-    KPP = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
-    ORGN = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
-    OKPO = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    INN = sqlalchemy.Column(sqlalchemy.Integer, unique=True, nullable=False)
+    KPP = sqlalchemy.Column(sqlalchemy.Integer, unique=True, nullable=False)
+    ORGN = sqlalchemy.Column(sqlalchemy.Integer, unique=True, nullable=False)
+    OKPO = sqlalchemy.Column(sqlalchemy.Integer, unique=True, nullable=False)
+
+    creator = sqlalchemy.Column(sqlalchemy.String, ForeignKey('users.login'))
+    company_creators = relationship("User", order_by="User.login")
+
     # name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     # login = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
     # hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
@@ -32,5 +38,4 @@ class Company(SqlAlchemyBase, UserMixin, SerializerMixin):
     # news = orm.relation("News", back_populates='user')
     # permissions = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    # def __repr__(self):
-    #     print(f"0")
+

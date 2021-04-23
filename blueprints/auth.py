@@ -18,6 +18,18 @@ auth_blueprint = Blueprint(
     template_folder='templates')
 
 
+def get_types():
+    """
+    Get item types from database.
+
+    :return: List of item types
+    """
+    db_sess = create_session()  # Create database session
+    types = db_sess.query(Type).all()  # Get item types from database
+    db_sess.close()  # Shut down database session
+    return types
+
+
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
 def reqister():
     """
@@ -26,9 +38,9 @@ def reqister():
     :return: HTML page with appropriate code
     """
     form = RegisterForm()
-    db_sess = create_session()
-    types = db_sess.query(Type).all()
+    types = get_types()
     if form.validate_on_submit():
+        db_sess = create_session()  # Create database session
         message = ""
         if form.password.data != form.password_again.data:
             message = "Пароли не совпадают"
@@ -37,9 +49,9 @@ def reqister():
         if db_sess.query(User).filter(User.login == form.login.data).first():
             message = "Такой login уже используется"
         if message:
+            db_sess.close()  # Shut down database session
             return render_template('register.html', title='Регистрация',
-                                   form=form, types=types,
-                                   message=message)
+                                   form=form, types=types, message=message)
         user = User(
             login=form.login.data,
             email=form.email.data,
@@ -48,33 +60,42 @@ def reqister():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
+        db_sess.close()  # Shut down database session
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form,
                            types=types)
 
 
-# Login page:
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Login page.
+
+    :return: HTML page with appropriate code
+    """
     form = LoginForm()
-    db_sess = create_session()
+    types = get_types()
     if form.validate_on_submit():
+        db_sess = create_session()  # Create database session
         user = db_sess.query(User).filter(
             User.email == form.email.data).first()
+        db_sess.close()  # Shut down database session
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-        return render_template('login.html',
-                               message="Неправильный логин или пароль",
-                               form=form)
-    types = db_sess.query(Type).all()
+        return render_template('login.html', types=types, form=form,
+                               message="Неправильный логин или пароль")
     return render_template('login.html', title='Авторизация', form=form,
                            types=types)
 
 
-# Logout function:
 @auth_blueprint.route('/logout')
 @login_required
 def logout():
+    """
+    Logout function.
+
+    :return: Redirect to main page
+    """
     logout_user()
     return redirect("/")

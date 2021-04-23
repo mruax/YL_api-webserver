@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 align="center" class="h1-title">{{ code }} {{ name }}</h1>
+<p align="center" style="font-size: 20px; margin-bottom: 20px;">{{ description }}</p>
+<p align="left" class="p-main-text">{{ message }}</p>
+<a href="/create"><button class="btn btn-outline-success" type="button">Вернуться к меню создания</button></a>
+{% endblock %}
