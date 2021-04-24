@@ -21,4 +21,4 @@ class CompanyForm(FlaskForm):
     OKPO = IntegerField('Общероссийский классификатор предприятий и '
                         'организаций (ОКПО) - 10 цифр',
                         validators=[DataRequired()])
-    submit = SubmitField('Добавить товар')
+    submit = SubmitField('Зарегистрировать компанию')
