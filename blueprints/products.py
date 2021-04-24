@@ -28,9 +28,8 @@ display_type = "cards"  # cards(default) or list
 
 
 def correct_creation(types, message):
-    render_template('object_created.html', types=types, code="200", name="OK",
-                    message=message,
-                    description="Object created")
+    return render_template('object_created.html', types=types, code="200", name="OK",
+                           message=message, description="Object created")
 
 
 def check_grammar(form):
@@ -46,7 +45,6 @@ def check_grammar(form):
     except Exception:
         pass
     return message
-
 
 
 def change_view():
@@ -241,8 +239,8 @@ def create_object_page(object_name=""):
     """
     Create item/type of item/company page.
 
-    :param company_name: Requested object to create
-    :type company_name: str
+    :param object_name: Requested object to create
+    :type object_name: str
     :return: HTML page with appropriate code
     """
     item_form = ItemForm()
@@ -252,7 +250,7 @@ def create_object_page(object_name=""):
     types, _ = get_types_extended()
 
     if item_form.validate_on_submit():
-        if object_name == "product":
+        if object_name == "item":
             db_sess = create_session()  # Create database session
             company = db_sess.query(Company).filter(
                 Company.name == item_form.company.data).first()
