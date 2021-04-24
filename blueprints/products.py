@@ -308,8 +308,7 @@ def create_object_page(object_name=""):
         if object_name == "company":
             message = check_grammar(company_form)
             try:
-                if int(company_form.post_address.data) < 100000 and \
-                        int(company_form.post_address.data) > 999999:
+                if 100000 > int(company_form.post_address.data) > 999999:
                     message = "Почтовый индекс должен быть в формате XXXXXX"
             except Exception:
                 message = "Почтовый индекс указан неверно"
