@@ -1,10 +1,13 @@
-# Flask functions import:
+# OS import:
 import os
 
+# Flask functions import:
 from flask import Flask, render_template
 from flask_login import LoginManager
+from flask_restful import Api
 
 # Blueprints import:
+from blueprints.api import api_blueprint, ItemResource, ItemsListResource
 from blueprints.auth import auth_blueprint
 from blueprints.general import general_blueprint
 from blueprints.mail import mail_blueprint
@@ -22,11 +25,17 @@ app.config.from_pyfile('config.py')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# Api initialization:
+api = Api(app)
+api.add_resource(ItemsListResource, '/api/v2/items')  # all items
+api.add_resource(ItemResource, '/api/v2/items/<int:item_id>')  # item by id
+
 # Use this to run with ngrok (also need to change to app.run() in main())
 # from flask_ngrok import run_with_ngrok
 # run_with_ngrok(app)
 
 # Blueprints registration:
+app.register_blueprint(api_blueprint)
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(general_blueprint)
 app.register_blueprint(mail_blueprint)

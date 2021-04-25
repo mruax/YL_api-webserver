@@ -1,11 +1,12 @@
 import sqlalchemy
 from flask_login import UserMixin
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
 # from .companies import Company
 from .db_session import SqlAlchemyBase
+
+
 # from .types import Type
 
 
@@ -19,15 +20,11 @@ class Item(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     company = sqlalchemy.Column(sqlalchemy.String,
                                 ForeignKey('companies.name'))
-    companies = relationship("Company", order_by="Company.name")
 
     date = sqlalchemy.Column(sqlalchemy.String)
     image = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String)
 
     type = sqlalchemy.Column(sqlalchemy.String, ForeignKey('types.name'))
-    types = relationship("Type", order_by="Type.name")
 
     creator = sqlalchemy.Column(sqlalchemy.String, ForeignKey('users.login'))
-    item_creators = relationship("User", order_by="User.login")
-

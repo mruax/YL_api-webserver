@@ -1,5 +1,8 @@
+# Date function import:
+from datetime import date
+
 # Flask functions import:
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 
 # Database functions import
@@ -11,10 +14,6 @@ from data.users import User
 # This blueprint describes storage pages:
 from forms.company import CompanyForm
 from forms.item import ItemForm
-
-
-from datetime import date
-
 from forms.type import TypeForm
 
 products_blueprint = Blueprint(
@@ -28,7 +27,8 @@ display_type = "cards"  # cards(default) or list
 
 
 def correct_creation(types, message):
-    return render_template('object_created.html', types=types, code="200", name="OK",
+    return render_template('object_created.html', types=types, code="200",
+                           name="OK",
                            message=message, description="Object created")
 
 

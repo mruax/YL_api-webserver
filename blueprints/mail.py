@@ -6,17 +6,15 @@ from dotenv import load_dotenv
 # Flask functions import:
 from flask import render_template, request, Blueprint, redirect, abort
 from flask_login import current_user, login_required
-
 # Import mail functions:
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, IntegerField, StringField
 from wtforms.validators import DataRequired
 
-from data.mail_sender import send_mail
 # Database functions import:
 from data.db_session import create_session
+from data.mail_sender import send_mail
 from data.types import Type
-
 # Parse .env file and load all mail variables:
 from data.users import User
 
@@ -82,13 +80,13 @@ def post_form():
     if email == current_user.email and form.validate_on_submit():
         try:
             send_mail(email, 'Подтверждение электронного адреса',
-                  f'Привет! Для того, чтобы получить доступ ко всем функциям '
-                  f'необходимо ввести на сайте пароль: '
-                  f'{mail_code} '
-                  f'Вы можете ознакомиться с пользовательским соглашением в '
-                  f'прикрепленном файле. '
-                  f'Благодарим за использование нашего сервиса!',
-                  ['static\\content\\terms_of_use.pdf'])
+                      f'Привет! Для того, чтобы получить доступ ко всем функциям '
+                      f'необходимо ввести на сайте пароль: '
+                      f'{mail_code} '
+                      f'Вы можете ознакомиться с пользовательским соглашением в '
+                      f'прикрепленном файле. '
+                      f'Благодарим за использование нашего сервиса!',
+                      ['static\\content\\terms_of_use.pdf'])
             return redirect('/check')
         except Exception as error:
             return render_template('error_handler.html', types=get_types(),
@@ -133,7 +131,8 @@ def post_code_form():
     code = request.values.get('code')
     if int(code) == mail_code:
         db_sess = create_session()  # Create database session
-        user = db_sess.query(User).filter(User.email == current_user.email).first()
+        user = db_sess.query(User).filter(
+            User.email == current_user.email).first()
         if user:
             user.permissions = "cooperator"
             db_sess.commit()
