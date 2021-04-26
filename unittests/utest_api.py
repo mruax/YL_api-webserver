@@ -1,6 +1,5 @@
 # Warning! Unittest deletes last item/type/company in database and create new.
 
-import json
 import unittest
 
 import werkzeug
@@ -8,8 +7,6 @@ from flask import Flask
 
 from blueprints.api import *
 from data import db_session
-import requests
-
 
 # Database setup:
 db_session.global_init("../db/storage.db")
@@ -55,7 +52,6 @@ class ApiTestGetRequests(unittest.TestCase):
             except Exception:
                 print("Database is empty")
 
-
     def test_item_get_incorrect1(self):  # Test №3
         with app.app_context():
             try:
@@ -76,7 +72,6 @@ class ApiTestGetRequests(unittest.TestCase):
             except Exception as e:
                 print(e)
 
-
     def test_item_get_incorrect3(self):  # Test №5
         with app.app_context():
             try:
@@ -86,7 +81,6 @@ class ApiTestGetRequests(unittest.TestCase):
                 a = item.get()
             except Exception as e:
                 print(e)
-
 
     def test_item_get_incorrect4(self):  # Test №6
         with app.app_context():
@@ -98,7 +92,6 @@ class ApiTestGetRequests(unittest.TestCase):
             except Exception as e:
                 print(e)
 
-
     def test_item_get_incorrect5(self):  # Test №7
         with app.app_context():
             try:
@@ -108,7 +101,6 @@ class ApiTestGetRequests(unittest.TestCase):
                 a = item.get("1")
             except Exception as e:
                 print(e)
-
 
     def test_items_get_correct(self):  # Test №8
         """
@@ -149,7 +141,6 @@ class ApiTestPostRequests(unittest.TestCase):
                 print("9: Correct")
             except Exception as e:
                 print(e)
-
 
     def test_item_post_incorrect(self):  # Test №10
         with app.test_client() as client:

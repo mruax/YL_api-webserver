@@ -3,11 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy import ForeignKey
 from sqlalchemy_serializer import SerializerMixin
 
-# from .companies import Company
 from .db_session import SqlAlchemyBase
-
-
-# from .types import Type
 
 
 class Item(SqlAlchemyBase, UserMixin, SerializerMixin):

@@ -6,9 +6,6 @@ from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
 
 
-# from .items import Item
-
-
 class Type(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'types'
 

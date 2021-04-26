@@ -11,11 +11,12 @@ from data.db_session import create_session
 from data.items import Item
 from data.types import Type
 from data.users import User
-# This blueprint describes storage pages:
+# Forms import:
 from forms.company import CompanyForm
 from forms.item import ItemForm
 from forms.type import TypeForm
 
+# This blueprint describes storage pages:
 products_blueprint = Blueprint(
     'products_blueprint',
     __name__,

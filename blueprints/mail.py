@@ -6,18 +6,19 @@ from dotenv import load_dotenv
 # Flask functions import:
 from flask import render_template, request, Blueprint, redirect, abort
 from flask_login import current_user, login_required
-# Import mail functions:
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, IntegerField, StringField
 from wtforms.validators import DataRequired
 
-# Database functions import:
+# Database seession import:
 from data.db_session import create_session
+# Import mail functions:
 from data.mail_sender import send_mail
+# Database functions import:
 from data.types import Type
-# Parse .env file and load all mail variables:
 from data.users import User
 
+# Parse .env file and load all mail variables:
 load_dotenv()
 
 # This blueprint describes mail page:
@@ -80,11 +81,11 @@ def post_form():
     if email == current_user.email and form.validate_on_submit():
         try:
             send_mail(email, 'Подтверждение электронного адреса',
-                      f'Привет! Для того, чтобы получить доступ ко всем функциям '
-                      f'необходимо ввести на сайте пароль: '
+                      f'Привет! Для того, чтобы получить доступ ко всем '
+                      f'функциям необходимо ввести на сайте пароль: '
                       f'{mail_code} '
-                      f'Вы можете ознакомиться с пользовательским соглашением в '
-                      f'прикрепленном файле. '
+                      f'Вы можете ознакомиться с пользовательским '
+                      f'соглашением в прикрепленном файле. '
                       f'Благодарим за использование нашего сервиса!',
                       ['static\\content\\terms_of_use.pdf'])
             return redirect('/check')
@@ -93,7 +94,7 @@ def post_form():
                                    code="520", name="Unknown Error",
                                    description=error,
                                    message=f"Во время отправки письма на "
-                                           f"{email} возникла ошибка.")
+                                            f"{email} возникла ошибка.")
     else:
         return render_template('error_handler.html', types=get_types(),
                                code="400", name="Bad Request",

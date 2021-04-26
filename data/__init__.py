@@ -1,6 +1,7 @@
-# Database functions import:
+# Sqlalchemy relationship import:
 from sqlalchemy.orm import relationship
 
+# Database functions import:
 from data.companies import *
 from data.db_session import *
 from data.items import *
